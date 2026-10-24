@@ -15,7 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.aydsii.demo.repository.PromocionRepository;
-import com.aydsii.demo.dto.ProductoCatalogoDTO;
+import com.aydsii.demo.DTO.ProductoCatalogoDTO;
 
 @Service 
 @RequiredArgsConstructor 
@@ -24,7 +24,7 @@ public class CatalogoService {
     private final ProductoRepository productoRepository;
     private final PromocionRepository promocionRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ProductoCatalogoDTO> obtenerCatalogo(String categoria, String tipo) {
         LocalDate hoy = LocalDate.now();
 
@@ -38,8 +38,8 @@ public class CatalogoService {
     private ProductoCatalogoDTO armarDTO(Producto p, LocalDate hoy) {
         BigDecimal porcentaje = promocionRepository
             .buscarVigente(p.getCodigo(), hoy).stream()
-            .map(Promocion::getPorcentaje)
-            .max(Comparator<T>.naturalOrder())
+            .map(Promocion::getPorcentajeDescuento)
+            .max(Comparator.naturalOrder())
             .orElse(BigDecimal.ZERO);
 
         BigDecimal precioFinal = p.getPrecio()
@@ -52,9 +52,10 @@ public class CatalogoService {
             p.getCodigo(),
             p.getNombre(),
             p.getDescripcion(),
+            p.getPrecio(),
             p.getCategoria(),
             p.getTipo(),
-            p.getPrecio(),
+            p.getStock() > 0,
             porcentaje,
             precioFinal
         );

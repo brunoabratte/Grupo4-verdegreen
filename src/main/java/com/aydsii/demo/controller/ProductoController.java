@@ -8,17 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import com.aydsii.demo.service.CatalogoService;
+import com.aydsii.demo.DTO.ProductoCatalogoDTO;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/productos")
+@RequiredArgsConstructor 
 public class ProductoController {
     private final CatalogoService catalogoService;
 
+    @GetMapping
     public ResponseEntity<List<ProductoCatalogoDTO>> consultarCatalogo(
         @RequestParam(required = false) String categoria,
         @RequestParam(required = false) String tipo
         ) {
-            return ResponseEntity.ok(catalogoService.consultarCatalogo(categoria, tipo));
-    }
+            return ResponseEntity.ok(catalogoService.obtenerCatalogo(categoria, tipo));
+        }
     
 }
