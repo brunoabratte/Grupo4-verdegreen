@@ -24,7 +24,7 @@ public class CompraController {
 
     @GetMapping("/resumen")
     public ApiResponse<Map<String,Object>> obtenerResumenCompra(@RequestParam Long clienteId) {
-        return ApiResponse.success(200,"Resumen de compra",compraService.obtenerResumenCompra(clienteId));
+        return new ApiResponse<Map<String, Object>>(true,"Resumen de compra",compraService.obtenerResumenCompra(clienteId));
     }
 
     @PostMapping
@@ -38,6 +38,6 @@ public class CompraController {
                 + ") y enviar comprobante al WhatsApp " + whatsapp + " antes de 72 horas.";
         }
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponse.success(201,mensaje,compra));
+            .body(new ApiResponse<CompraResponseDTO>(true,mensaje,compra));
     }
 }

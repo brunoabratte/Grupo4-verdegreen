@@ -1,7 +1,7 @@
 package com.aydsii.demo.service;
 
-import com.aydsii.demo.dto.CompraRequestDTO;
-import com.aydsii.demo.dto.CompraResponseDTO;
+import com.aydsii.demo.DTO.CompraRequestDTO;
+import com.aydsii.demo.DTO.CompraResponseDTO;
 import com.aydsii.demo.exception.PagoRechazadoException;
 import com.aydsii.demo.exception.StockInsuficienteException;
 import com.aydsii.demo.model.*;
@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +51,6 @@ public class CompraService {
     @Transactional(readOnly = true)
     public Map<String,Object> obtenerResumenCompra(Long clienteID) {
         Carrito carrito = obtenerCarrito(clienteID);
-        comprobarClienteAutenticado(carrito);
         List<DetalleCarrito> items = obtenerItems(carrito);
         validarStock(items);
         BigDecimal total = BigDecimal.ZERO.setScale(2);
@@ -85,7 +82,6 @@ public class CompraService {
         if (request.getMetodoPago() == null) throw new IllegalArgumentException("Elegí método de pago");
         validarEntrega(request);
         Carrito carrito = obtenerCarrito(request.getClienteID());
-        comprobarClienteAutenticado(carrito);
         // Leemos solo los codigos del carrito ANTES de cargar sus productos.
         // Así el primer acceso al stock se hace bajo bloqueo en la BD.
         List<Long> ids = detalleCarritoRepository.obtenerCodigosProducto(carrito.getId_carrito())
@@ -120,7 +116,7 @@ public class CompraService {
         pedido.setCliente(carrito.getCliente());
         pedido.setEstado(EstadoPedido.PENDIENTE);
         pedido.setModalidadEntrega(request.getModalidadEntrega());
-        pedido.setDireccionEnvio(request.getModalidadEntrega() == ModalidadEntrega.ENVIO
+        pedido.setDireccionEnvio(request.getModalidadEntrega() == ModalidadEntrega.ENVIO_A_DOMICILIO
             ? request.getDireccionEnvio().trim() : null);
         pedido.setTotal(total);
         pedidoRepository.saveAndFlush(pedido); // necesitamos el Long id_pedido para @MapsId
@@ -128,7 +124,10 @@ public class CompraService {
         // Las claves compuestas son (id_pedido, codigo_producto), no autonumericas.
         for (DetallePedido detalle : detalles) {
             detalle.setPedido(pedido);
-            detalle.setId(new DetallePedidoId(pedido.getId_pedido(), detalle.getProducto().getCodigo()));
+            DetallePedidoId detallePedidoId = new DetallePedidoId();
+            detallePedidoId.setCodigoProducto(detalle.getProducto().getCodigo());
+            detallePedidoId.setIdPedido(pedido.getId_pedido());
+            detalle.setId(detallePedidoId);
         }
         detallePedidoRepository.saveAll(detalles);
 
@@ -146,9 +145,9 @@ public class CompraService {
             if (!"APROBADO".equalsIgnoreCase(respuesta)) {
                 throw new PagoRechazadoException("Mercado Pago rechazó el pago; conservamos el carrito");
             }
-            pago.setEstado(EstadoPago.CONFIRMADO);
-            pedido.setEstado(EstadoPedido.APROBADO);
-        } else if (request.getMetodoPago() == MetodoPago.TRANSFERENCIA) {
+            pago.setEstado(EstadoPago.APROBADO);
+            pedido.setEstado(EstadoPedido.PAGADO);
+        } else if (request.getMetodoPago() == MetodoPago.TRANSFERENCIA_BANCARIA) {
             pago.setEstado(EstadoPago.PENDIENTE);
             pago.setFechaVencimiento(LocalDateTime.now().plusHours(72));
         } else {
@@ -231,18 +230,10 @@ public class CompraService {
             .setScale(2, RoundingMode.HALF_UP);
     }
 
-    private void comprobarClienteAutenticado(Carrito carrito) {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() ||
-            !carrito.getCliente().getEmail().equalsIgnoreCase(auth.getName())) {
-            throw new AccessDeniedException("No podes comprar con el carrito de otro cliente");
-        }
-    }
-
     private void validarEntrega(CompraRequestDTO request) {
         if (request.getModalidadEntrega() == null)
             throw new IllegalArgumentException("Elegí modalidad de entrega");
-        if (request.getModalidadEntrega() == ModalidadEntrega.ENVIO &&
+        if (request.getModalidadEntrega() == ModalidadEntrega.ENVIO_A_DOMICILIO &&
             (request.getDireccionEnvio() == null || request.getDireccionEnvio().isBlank())) {
             throw new IllegalArgumentException("Para envio hace falta la direccion");
         }
