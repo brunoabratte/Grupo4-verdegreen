@@ -24,6 +24,12 @@ public class Producto {
     private BigDecimal precio;
 
     @Column (nullable = false)
+    private String categoria;
+
+    @Column (nullable = false)
+    private String tipo;
+
+    @Column (nullable = false)
     private Integer stock = 0;
 
     @Column (nullable = false)
