@@ -39,7 +39,7 @@ public class CatalogoService {
         BigDecimal porcentaje = promocionRepository
             .buscarVigente(p.getCodigo(), hoy).stream()
             .map(Promocion::getPorcentaje)
-            .max(Comparator.naturalOrder())
+            .max(Comparator<T>.naturalOrder())
             .orElse(BigDecimal.ZERO);
 
         BigDecimal precioFinal = p.getPrecio()
