@@ -14,7 +14,7 @@ public class PromocionProducto {
     private PromocionProductoId id = new PromocionProductoId();
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @MapsId ("idPromocion")
+    @MapsId ("idPromocion") //le dice a JPA que la columna idPromocion de la clase PromocionProductoId es la clave primaria de la entidad PromocionProducto
     @JoinColumn (name = "id_promocion", nullable = false)
     private Promocion promocion;
 
