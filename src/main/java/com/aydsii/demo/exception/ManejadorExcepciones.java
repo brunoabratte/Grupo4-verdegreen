@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.aydsii.demo.response.ApiResponse;
 
-@ResControllerAdvice 
+@RestControllerAdvice 
 public class ManejadorExcepciones {
     
     //FE-01 no se pueden obtener los productos
-    @ExceptionHandler ({DataAccessException.class, TransactionalException.class})
+    @ExceptionHandler ({ DataAccessException.class, TransactionException.class })
     public ResponseEntity<ApiResponse<Void>> errorAlRecuperarCatalogo(Exception e) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
             .body(new ApiResponse<>(false, "No se pudo cargar el catalogo. Por favor, reintente.", null));
