@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-package com.aydsii.demo.model;
-=======
 package com.aydsii.demo.model;
 
 import jakarta.persistence.*;
@@ -28,4 +25,4 @@ public class Cliente {
     private String telefono;
     private String direccion;    
 }
->>>>>>> 027ab2df436c17890585d1f55ae7f25023ba0995
+
