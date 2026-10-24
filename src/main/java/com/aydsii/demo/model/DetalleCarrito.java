@@ -19,8 +19,8 @@ public class DetalleCarrito {
     private Carrito carrito;
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @MapsId ("id_producto")
-    @JoinColumn (name = "id_producto", nullable = false)
+    @MapsId ("codigo_producto")
+    @JoinColumn (name = "codigo_producto", nullable = false)
     private Producto producto;
 
     @Column (nullable = false)

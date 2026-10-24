@@ -14,12 +14,12 @@ public class PromocionProducto {
     private PromocionProductoId id = new PromocionProductoId();
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @MapsId ("id_promocion")
+    @MapsId ("idPromocion")
     @JoinColumn (name = "id_promocion", nullable = false)
     private Promocion promocion;
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @MapsId ("id_producto")
-    @JoinColumn (name = "id_producto", nullable = false)
+    @MapsId ("codigoProducto")
+    @JoinColumn (name = "codigo_producto", nullable = false)
     private Producto producto;
 }

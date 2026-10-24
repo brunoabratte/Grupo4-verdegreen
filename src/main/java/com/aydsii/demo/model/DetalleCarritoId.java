@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Embeddable
+@Embeddable //le dice a JPA que esta clase no es una tabla, es un conjunto de columnas que se incrustan en otra entidad
 @Getter 
 @Setter 
 @NoArgsConstructor 

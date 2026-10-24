@@ -22,8 +22,8 @@ public class DetallePedido {
     private Pedido pedido;
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @MapsId ("idProducto")
-    @JoinColumn (name = "id_producto", nullable = false)
+    @MapsId ("codigoProducto")
+    @JoinColumn (name = "codigo_producto", nullable = false)
     private Producto producto;
 
     @Column (nullable = false)
@@ -32,6 +32,6 @@ public class DetallePedido {
     @Column (nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
-    @Column (nullable = false, precision = 10, scale = 2)
-    private BigDecimal porcentajeDescuento = BigDecimal.ZERO;
+    @Column (nullable = false, precision = 5, scale = 2)
+    private BigDecimal porcentajeAplicado = BigDecimal.ZERO;
 }
