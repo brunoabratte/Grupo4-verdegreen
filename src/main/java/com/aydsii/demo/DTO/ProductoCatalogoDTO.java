@@ -13,11 +13,20 @@ import lombok.Setter;
 @AllArgsConstructor 
 public class ProductoCatalogoDTO {
     private Long codigo;
+
     private String nombre;
+
     private String descripcion;
+
     private BigDecimal precio;
+
     private String categoria;
-    private boolean diponible;
+
+    private String tipo;
+
+    private boolean disponible;
+
     private BigDecimal PorcentajeDescuento;
+
     private BigDecimal precioFinal;
 }

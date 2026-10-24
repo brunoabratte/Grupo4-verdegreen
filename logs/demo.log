@@ -9124,3 +9124,48 @@ Caused by: org.hibernate.MappingException: component: com.aydsii.demo.model.Prom
 2026-10-24 15:08:42.296 WARN  [restartedMain] org.springdoc.core.events.SpringDocAppInitializer - SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
 2026-10-24 15:08:42.296 WARN  [restartedMain] org.springdoc.core.events.SpringDocAppInitializer - SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
 2026-10-24 15:08:42.297 INFO  [restartedMain] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-10-24 15:16:21.594 INFO  [File Watcher] org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-10-24 15:16:21.597 INFO  [Thread-33] org.springframework.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-24 15:16:21.597 INFO  [tomcat-shutdown] org.apache.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2026-10-24 15:16:21.612 INFO  [tomcat-shutdown] org.springframework.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-10-24 15:16:21.612 INFO  [Thread-33] org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-10-24 15:16:21.615 INFO  [Thread-33] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-24 15:16:21.617 INFO  [Thread-33] com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Shutdown initiated...
+2026-10-24 15:16:21.619 INFO  [Thread-33] com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Shutdown completed.
+2026-10-24 15:16:21.791 INFO  [restartedMain] com.aydsii.demo.DemoApplication - Starting DemoApplication using Java 25.0.4 with PID 7912 (C:\Users\BRUNO\Documents\proyecto-aydsII\target\classes started by BRUNO in C:\Users\BRUNO\Documents\proyecto-aydsII)
+2026-10-24 15:16:21.793 DEBUG [restartedMain] com.aydsii.demo.DemoApplication - Running with Spring Boot v4.1.1, Spring v7.0.9
+2026-10-24 15:16:21.793 INFO  [restartedMain] com.aydsii.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2026-10-24 15:16:22.129 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-24 15:16:22.148 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 16 ms. Found 1 JPA repository interface.
+2026-10-24 15:16:22.250 INFO  [restartedMain] org.springframework.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-10-24 15:16:22.252 INFO  [restartedMain] org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-10-24 15:16:22.252 INFO  [restartedMain] org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-10-24 15:16:22.252 INFO  [restartedMain] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-24 15:16:22.301 INFO  [restartedMain] org.springframework.boot.web.context.servlet.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 498 ms
+2026-10-24 15:16:22.357 INFO  [restartedMain] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-24 15:16:22.424 INFO  [restartedMain] org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-24 15:16:22.426 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-10 - Starting...
+2026-10-24 15:16:22.432 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-10 - Added connection com.mysql.cj.jdbc.ConnectionImpl@f5a80de
+2026-10-24 15:16:22.433 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-10 - Start completed.
+2026-10-24 15:16:22.434 WARN  [restartedMain] org.hibernate.orm.core - HHH000511: The 5.5.5 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly.The minimum supported version is 8.0.0. Check the community dialects project for available legacy versions.
+2026-10-24 15:16:22.435 INFO  [restartedMain] org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/verdegreen]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 5.5.5
+	Default catalog/schema: verdegreen/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-24 15:16:22.622 INFO  [restartedMain] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-24 15:16:22.933 INFO  [restartedMain] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-24 15:16:22.984 WARN  [restartedMain] org.springframework.boot.jpa.autoconfigure.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-10-24 15:16:23.159 INFO  [restartedMain] org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-10-24 15:16:23.165 INFO  [restartedMain] org.springframework.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-10-24 15:16:23.169 INFO  [restartedMain] com.aydsii.demo.DemoApplication - Started DemoApplication in 1.449 seconds (process running for 1554.665)
+2026-10-24 15:16:23.170 WARN  [restartedMain] org.springdoc.core.events.SpringDocAppInitializer - SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-10-24 15:16:23.170 WARN  [restartedMain] org.springdoc.core.events.SpringDocAppInitializer - SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-10-24 15:16:23.171 INFO  [restartedMain] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
