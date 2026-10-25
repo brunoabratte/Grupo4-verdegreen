@@ -6,6 +6,8 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+
+import com.aydsii.demo.dto.ProductoCatalogoDTO;
 import com.aydsii.demo.model.Producto;
 import com.aydsii.demo.model.Promocion;
 
@@ -15,7 +17,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.aydsii.demo.repository.PromocionRepository;
-import com.aydsii.demo.DTO.ProductoCatalogoDTO;
 
 @Service 
 @RequiredArgsConstructor 

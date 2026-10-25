@@ -1,6 +1,6 @@
 package com.aydsii.demo.controller;
 
-import com.aydsii.demo.DTO.*;
+import com.aydsii.demo.dto.*;
 import com.aydsii.demo.model.MetodoPago;
 import com.aydsii.demo.response.ApiResponse;
 import com.aydsii.demo.service.CompraService;

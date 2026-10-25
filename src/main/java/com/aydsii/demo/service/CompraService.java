@@ -1,7 +1,7 @@
 package com.aydsii.demo.service;
 
-import com.aydsii.demo.DTO.CompraRequestDTO;
-import com.aydsii.demo.DTO.CompraResponseDTO;
+import com.aydsii.demo.dto.CompraRequestDTO;
+import com.aydsii.demo.dto.CompraResponseDTO;
 import com.aydsii.demo.exception.PagoRechazadoException;
 import com.aydsii.demo.exception.StockInsuficienteException;
 import com.aydsii.demo.model.*;

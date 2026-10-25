@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+
+import com.aydsii.demo.dto.ProductoCatalogoDTO;
 import com.aydsii.demo.service.CatalogoService;
-import com.aydsii.demo.DTO.ProductoCatalogoDTO;
 
 import lombok.RequiredArgsConstructor;
 

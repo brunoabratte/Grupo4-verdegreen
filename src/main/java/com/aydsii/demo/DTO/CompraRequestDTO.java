@@ -1,4 +1,4 @@
-package com.aydsii.demo.DTO;
+package com.aydsii.demo.dto;
 
 import com.aydsii.demo.model.MetodoPago;
 import com.aydsii.demo.model.ModalidadEntrega;
