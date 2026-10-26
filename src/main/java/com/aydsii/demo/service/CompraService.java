@@ -83,9 +83,9 @@ public class CompraService {
         List<Long> ids = detalleCarritoRepository.obtenerCodigosProducto(carrito.getId_carrito())
             .stream().distinct().sorted().toList();
         if (ids.isEmpty()) throw new IllegalArgumentException("Carrito vacio");
-        List<Producto> bloqueados = bloquearProductos(ids);
+        List<Producto> obtenidos = obtenerProductos(ids);
         List<DetalleCarrito> items = obtenerItems(carrito);
-        Map<Long,Producto> productos = bloqueados.stream()
+        Map<Long,Producto> productos = obtenidos.stream()
             .collect(Collectors.toMap(Producto::getCodigo, p -> p));
         if (productos.size() != ids.size()) throw new StockInsuficienteException(List.of("Producto eliminado"));
         validarStock(items, productos);
@@ -114,7 +114,7 @@ public class CompraService {
         pedido.setDireccionEnvio(request.getModalidadEntrega() == ModalidadEntrega.ENVIO_A_DOMICILIO
             ? request.getDireccionEnvio().trim() : null);
         pedido.setTotal(total);
-        pedidoRepository.saveAndFlush(pedido); // necesitamos el Long id_pedido para @MapsId
+        pedidoRepository.saveAndFlush(pedido);
 
         // Las claves compuestas son (id_pedido, codigo_producto)
         for (DetallePedido detalle : detalles) {
@@ -134,8 +134,6 @@ public class CompraService {
         pago.setEstado(EstadoPago.PENDIENTE);
 
         if (request.getMetodoPago() == MetodoPago.MERCADO_PAGO) {
-            // Integración SIMULADA: si falla lanzamos exception y @Transactional
-            // revierte el Pedido, sus detalles y cualquier cambio de stock.
             String respuesta = pasarelaPago.solicitarPago(total, pedido.getId_pedido());
             if (!"APROBADO".equalsIgnoreCase(respuesta)) {
                 throw new PagoRechazadoException("Mercado Pago rechazó el pago; conservamos el carrito");
@@ -159,12 +157,7 @@ public class CompraService {
         return new CompraResponseDTO(pedido.getId_pedido(), pedido.getEstado(), pedido.getTotal());
     }
 
-    /**
-     * Bloquea los productos dentro de la transacción de realizarCompra.
-     * No requiere agregar metodos a ProductoRepository.
-     * Recibe IDs ordenados para reducir el riesgo de interbloqueos.
-     */
-    private List<Producto> bloquearProductos(List<Long> ids) {
+    private List<Producto> obtenerProductos(List<Long> ids) {
         List<Producto> productos = new ArrayList<>();
         for (Long id : ids) {
             Producto producto = entityManager.find(
