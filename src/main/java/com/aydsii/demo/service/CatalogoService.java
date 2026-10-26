@@ -37,11 +37,14 @@ public class CatalogoService {
     }
 
     private ProductoCatalogoDTO armarDTO(Producto p, LocalDate hoy) {
-        BigDecimal porcentaje = promocionRepository
+        //se aplica la promoción más conveniente; no se acumulan
+        Promocion mejor = promocionRepository
             .buscarVigente(p.getCodigo(), hoy).stream()
-            .map(Promocion::getPorcentajeDescuento)
-            .max(Comparator.naturalOrder())
-            .orElse(BigDecimal.ZERO);
+            .max(Comparator.comparing(Promocion::getPorcentajeDescuento))
+            .orElse(null);
+
+        BigDecimal porcentaje = mejor != null ? mejor.getPorcentajeDescuento() : BigDecimal.ZERO;
+        String nombrePromocion = mejor != null ? mejor.getNombre() : null;
 
         BigDecimal precioFinal = p.getPrecio()
             .multiply(BigDecimal.ONE.subtract(
@@ -57,6 +60,7 @@ public class CatalogoService {
             p.getCategoria(),
             p.getTipo(),
             p.getStock() > 0,
+            nombrePromocion,
             porcentaje,
             precioFinal
         );
