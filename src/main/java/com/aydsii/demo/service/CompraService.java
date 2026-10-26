@@ -1,13 +1,12 @@
 package com.aydsii.demo.service;
 
-import com.aydsii.demo.DTO.CompraRequestDTO;
-import com.aydsii.demo.DTO.CompraResponseDTO;
+import com.aydsii.demo.dto.CompraRequestDTO;
+import com.aydsii.demo.dto.CompraResponseDTO;
 import com.aydsii.demo.exception.PagoRechazadoException;
 import com.aydsii.demo.exception.StockInsuficienteException;
 import com.aydsii.demo.model.*;
 import com.aydsii.demo.repository.*;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -28,8 +27,6 @@ public class CompraService {
     private final PasarelaPago pasarelaPago;
     private final EntityManager entityManager;
 
-    // Repositorios de detalle/producto/promocion/pago: necesarios para tus mappings JPA
-    // porque Carrito y Pedido no tienen colecciones y Pago referencia a Pedido.
     public CompraService(CarritoRepository carritoRepository,
                          DetalleCarritoRepository detalleCarritoRepository,
                          PedidoRepository pedidoRepository,
@@ -173,7 +170,7 @@ public class CompraService {
         List<Producto> productos = new ArrayList<>();
         for (Long id : ids) {
             Producto producto = entityManager.find(
-                Producto.class, id, LockModeType.PESSIMISTIC_WRITE
+                Producto.class, id
             );
             if (producto != null) {
                 productos.add(producto);

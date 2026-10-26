@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-/** Solo para pruebas: NO inicia un pago real ni verifica webhooks. */
 @Service
 public class MercadopagoService implements PasarelaPago {
     private final String resultadoSimulado;

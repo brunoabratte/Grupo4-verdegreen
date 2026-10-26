@@ -1,4 +1,4 @@
-package com.aydsii.demo.DTO;
+package com.aydsii.demo.dto;
 
 import com.aydsii.demo.model.MetodoPago;
 import com.aydsii.demo.model.ModalidadEntrega;
@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
 public class CompraRequestDTO {
-    // Mantiene tu getClienteID(); acepta tanto clienteID como clienteId en JSON.
     @NotNull
     @JsonAlias({"clienteId", "cliente_id"})
     private Long clienteID;
