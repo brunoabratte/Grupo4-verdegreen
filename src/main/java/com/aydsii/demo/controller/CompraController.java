@@ -4,6 +4,10 @@ import com.aydsii.demo.dto.*;
 import com.aydsii.demo.model.MetodoPago;
 import com.aydsii.demo.response.ApiResponse;
 import com.aydsii.demo.service.CompraService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.validation.Valid;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +32,56 @@ public class CompraController {
     }
 
     @PostMapping
+    @Operation(
+    summary = "Realizar compra",
+    description = "Registra un pedido a partir del carrito de un cliente"
+    )
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+    responseCode = "201",
+    description = "Compra registrada correctamente"
+    )
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "400",
+        description = "Datos de compra incorrectos"
+    )
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "409",
+        description = "Stock insuficiente"
+    )  
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "402",
+        description = "Pago rechazado"
+    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Información necesaria para realizar la compra",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            examples = {
+                @ExampleObject(
+                    name = "Compra por transferencia",
+                    value = """
+                    {
+                        "clienteID": 13,
+                        "metodoPago": "TRANSFERENCIA_BANCARIA",
+                        "modalidadEntrega": "RETIRO_EN_LOCAL"
+                    }
+                    """
+                ),
+                @ExampleObject(
+                    name = "Compra con Mercado Pago",
+                    value = """
+                    {
+                        "clienteID": 13,
+                        "metodoPago": "MERCADO_PAGO",
+                        "modalidadEntrega": "ENVIO_A_DOMICILIO",
+                        "direccionEnvio": "Calle 123"
+                    }
+                    """
+                )
+            }
+        )
+    )
     public ResponseEntity<ApiResponse<CompraResponseDTO>> realizarCompra(
             @Valid @RequestBody CompraRequestDTO request) {
         CompraResponseDTO compra = compraService.realizarCompra(request);

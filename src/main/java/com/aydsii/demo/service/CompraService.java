@@ -80,7 +80,6 @@ public class CompraService {
         validarEntrega(request);
         Carrito carrito = obtenerCarrito(request.getClienteID());
         // Leemos solo los codigos del carrito ANTES de cargar sus productos.
-        // Así el primer acceso al stock se hace bajo bloqueo en la BD.
         List<Long> ids = detalleCarritoRepository.obtenerCodigosProducto(carrito.getId_carrito())
             .stream().distinct().sorted().toList();
         if (ids.isEmpty()) throw new IllegalArgumentException("Carrito vacio");
@@ -107,7 +106,6 @@ public class CompraService {
         }
         if (total.signum() <= 0) throw new IllegalArgumentException("Total de compra invalido");
 
-        // Tu Pedido NO tiene setPago() ni agregarDetalle(): se guardan por separado.
         Pedido pedido = new Pedido();
         pedido.setFecha(LocalDateTime.now());
         pedido.setCliente(carrito.getCliente());
@@ -118,7 +116,7 @@ public class CompraService {
         pedido.setTotal(total);
         pedidoRepository.saveAndFlush(pedido); // necesitamos el Long id_pedido para @MapsId
 
-        // Las claves compuestas son (id_pedido, codigo_producto), no autonumericas.
+        // Las claves compuestas son (id_pedido, codigo_producto)
         for (DetallePedido detalle : detalles) {
             detalle.setPedido(pedido);
             DetallePedidoId detallePedidoId = new DetallePedidoId();
@@ -163,7 +161,7 @@ public class CompraService {
 
     /**
      * Bloquea los productos dentro de la transacción de realizarCompra.
-     * No requiere agregar métodos a ProductoRepository.
+     * No requiere agregar metodos a ProductoRepository.
      * Recibe IDs ordenados para reducir el riesgo de interbloqueos.
      */
     private List<Producto> bloquearProductos(List<Long> ids) {
