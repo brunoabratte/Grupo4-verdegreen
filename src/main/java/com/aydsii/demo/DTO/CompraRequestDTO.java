@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
 public class CompraRequestDTO {
-    // Mantiene tu getClienteID(); acepta tanto clienteID como clienteId en JSON.
     @NotNull
     @JsonAlias({"clienteId", "cliente_id"})
     private Long clienteID;
