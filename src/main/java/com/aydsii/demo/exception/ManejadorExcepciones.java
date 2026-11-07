@@ -10,6 +10,7 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.aydsii.demo.response.ApiResponse;
 
@@ -46,5 +47,20 @@ public class ManejadorExcepciones {
         HttpMessageNotReadableException.class})
     ResponseEntity<ApiResponse<Void>> datos(Exception ex) {
         return ResponseEntity.badRequest().body(new ApiResponse<Void>(false,"Datos incorrectos: " + ex.getMessage(),null));
+    }
+
+    // Período inválido - Caso de uso "Consultar historial de ventas"
+    @ExceptionHandler(PeriodoInvalidoException.class)
+    public ResponseEntity<ApiResponse<Void>> periodoInvalido(PeriodoInvalidoException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ApiResponse<>(false, e.getMessage(), null));
+    }
+
+    // Una fecha que no se puede interpretar (por ejemplo, 26/10/2026)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Void>> parametroConFormatoInvalido(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ApiResponse<>(false,
+                "El parámetro '" + e.getName() + "' tiene un formato inválido. Las fechas van como aaaa-mm-dd.", null));
     }
 }
