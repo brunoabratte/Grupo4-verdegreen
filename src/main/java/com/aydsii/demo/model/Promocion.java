@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity 
 @Getter 
@@ -31,4 +33,19 @@ public class Promocion {
 
     @Column (nullable = false)
     private LocalDate fechaFin;
+
+    // Rol "-promocionProductos" de la composición Promocion ◆ PromocionProducto (1..*).
+    // cascade = ALL: al guardar la promoción se guardan también sus vínculos.
+    @OneToMany(mappedBy = "promocion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PromocionProducto> promocionProductos = new ArrayList<>();
+
+    // Operación de diseño: la promoción arma sus propios vínculos con los productos.
+    public void agregarProductos(List<Producto> productos) {
+        for (Producto producto : productos) {
+            PromocionProducto vinculo = new PromocionProducto();
+            vinculo.setPromocion(this);
+            vinculo.setProducto(producto);
+            promocionProductos.add(vinculo);
+        }
+    }
 }
