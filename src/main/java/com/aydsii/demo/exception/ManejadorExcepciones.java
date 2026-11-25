@@ -42,6 +42,19 @@ public class ManejadorExcepciones {
         );
     }
 
+    //FE-01, FE-02 y FE-03: datos de la promoción inválidos - Caso de uso "Cargar promoción"
+    //(el WARN ya lo registra ValidadorPromocion con el detalle)
+    @ExceptionHandler(PromocionInvalidaException.class)
+    public ResponseEntity<ApiResponse<Void>> promocionInvalida(PromocionInvalidaException e) {
+        return ResponseEntity.badRequest().body(new ApiResponse<Void>(false, e.getMessage(), null));
+    }
+
+    //FE-04: producto inexistente - Caso de uso "Cargar promoción"
+    @ExceptionHandler(ProductoInexistenteException.class)
+    public ResponseEntity<ApiResponse<List<Long>>> productoInexistente(ProductoInexistenteException e) {
+        return ResponseEntity.badRequest().body(new ApiResponse<List<Long>>(false, e.getMessage(), e.getCodigos()));
+    }
+
     //Datos incorrectos
     @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class,
         HttpMessageNotReadableException.class})

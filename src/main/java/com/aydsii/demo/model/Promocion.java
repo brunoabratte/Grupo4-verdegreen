@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity 
 @Getter 
@@ -31,4 +33,18 @@ public class Promocion {
 
     @Column (nullable = false)
     private LocalDate fechaFin;
+
+    // Composición del diagrama estático: Promocion 1 ---- 1..* PromocionProducto
+    @OneToMany(mappedBy = "promocion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PromocionProducto> promocionProductos = new ArrayList<>();
+
+    // Diagrama de secuencia, pasos 7 y 8: por cada producto se crea un PromocionProducto
+    public void agregarProductos(List<Producto> productos) {
+        for (Producto producto : productos) {
+            PromocionProducto pp = new PromocionProducto();
+            pp.setPromocion(this);
+            pp.setProducto(producto);
+            promocionProductos.add(pp);
+        }
+    }
 }
