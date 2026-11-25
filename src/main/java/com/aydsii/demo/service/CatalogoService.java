@@ -18,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.aydsii.demo.repository.PromocionRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service 
 @RequiredArgsConstructor 
 public class CatalogoService {
@@ -25,15 +28,24 @@ public class CatalogoService {
     private final ProductoRepository productoRepository;
     private final PromocionRepository promocionRepository;
 
+    //podemos incorporar SLF4J así
+    private static final Logger logger = LoggerFactory.getLogger(CatalogoService.class);
+
     @Transactional
     public List<ProductoCatalogoDTO> obtenerCatalogo(String categoria, String tipo) {
+        logger.info("Iniciando consulta del catálogo. Categoría: {}, Tipo: {}", categoria, tipo);
+
         LocalDate hoy = LocalDate.now();
 
-        return productoRepository.findByActivoTrue().stream()
-            .filter(p -> categoria == null || p.getCategoria().equalsIgnoreCase(categoria))
-            .filter(p -> tipo == null || p.getTipo().equalsIgnoreCase(tipo))
+        List<ProductoCatalogoDTO> catalogo = productoRepository.findByActivoTrue().stream()
+            .filter(p -> categoria == null || categoria.equalsIgnoreCase(p.getCategoria()))
+            .filter(p -> tipo == null || tipo.equalsIgnoreCase(p.getTipo()))
             .map(p -> armarDTO(p, hoy))
             .toList();
+
+        logger.info("Consulta del catálogo finalizada. Productos encontrados: {}", catalogo.size());
+
+        return catalogo;
     }
 
     private ProductoCatalogoDTO armarDTO(Producto p, LocalDate hoy) {

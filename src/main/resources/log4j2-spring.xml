@@ -37,7 +37,7 @@
 		</Logger>
 
 		<!-- SQL ejecutado por Hibernate (subir a debug para verlo) -->
-		<Logger name="org.hibernate.SQL" level="info"/>
+		<Logger name="org.hibernate.SQL" level="debug"/>
 
 		<Root level="info">
 			<AppenderRef ref="Console"/>
