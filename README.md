@@ -1,6 +1,6 @@
-# demo
+# VerdeGreen
 
-Proyecto base con Spring Boot, JPA y MySQL. Sirve como punto de partida común: cada integrante hace un fork y trabaja desde el mismo estado inicial.
+Backend REST de VerdeGreen desarrollado con Spring Boot, Java, JPA y MySQL.
 
 - **Group / Artifact:** `com.aydsii` / `demo`
 - **Versión:** `0.0.1-SNAPSHOT`
@@ -8,126 +8,154 @@ Proyecto base con Spring Boot, JPA y MySQL. Sirve como punto de partida común: 
 
 ## Requerimientos
 
-| Herramienta | Versión | Notas |
+| Herramienta | Versión | Uso |
 |---|---|---|
-| JDK | 25 | Definido en `java.version` del `pom.xml` |
-| Maven | 3.9+ | No hace falta instalarlo: se usa el wrapper (`mvnw` / `mvnw.cmd`) |
-| Docker o Podman (opcional) | Cualquiera reciente | Para levantar MySQL con `compose.yaml` |
-| Git | Cualquiera reciente | Para el fork |
+| JDK | 25 | Ejecución del proyecto |
+| Maven | 3.9+ | Gestión y construcción del proyecto |
+| MySQL | 8.x | Base de datos |
+| Git | Cualquiera reciente | Control de versiones |
+| Docker o Podman | Opcional | Ejecución de MySQL en contenedor |
 
-## Dependencias incluidas
+## Tecnologías utilizadas
 
-| Dependencia | Versión | Uso |
-|---|---|---|
-| Spring Boot (parent) | 4.1.1 | Gestiona las versiones de los starters |
-| `spring-boot-starter-data-jpa` | 4.1.1 | JPA, Hibernate y HikariCP |
-| `spring-boot-starter-webmvc` | 4.1.1 | API REST |
-| `spring-boot-starter-validation` | 4.1.1 | Validación de datos (`@Valid`, `@NotNull`, etc.) |
-| `spring-boot-starter-log4j2` | 4.1.1 | Logging con Log4j2 (Log4j 2.25.5) |
-| `springdoc-openapi-starter-webmvc-ui` | 3.1.0 | Documentación OpenAPI y Swagger UI |
-| `mysql-connector-j` | 9.7.0 | Driver de MySQL (runtime) |
-| `lombok` | 1.18.46 | Reduce código repetitivo (opcional) |
-| `spring-boot-devtools` | 4.1.1 | Recarga automática en desarrollo (runtime, opcional) |
-| `spring-boot-starter-data-jpa-test` | 4.1.1 | Tests (scope test) |
-| `spring-boot-starter-webmvc-test` | 4.1.1 | Tests (scope test) |
+- Spring Boot y Spring MVC para los servicios REST.
+- Spring Data JPA e Hibernate para persistencia.
+- MySQL como sistema de gestión de base de datos.
+- Springdoc OpenAPI para documentación y Swagger UI.
+- SLF4J y Log4j2 para registro de eventos.
+- Lombok para reducir código repetitivo.
 
-> Logback está excluido de los starters porque se usa Log4j2. Si agregás otro starter de Spring Boot, excluí también `spring-boot-starter-logging`.
+## Estructura del proyecto
 
-## Estructura
-
-```
-.
-├── compose.yaml                         # MySQL para desarrollo (Docker / Podman)
-├── pom.xml
-└── src
-    ├── main
-    │   ├── java/com/aydsii/demo         # Código de la aplicación
-    │   └── resources
-    │       ├── application.properties   # Configuración (datasource, JPA)
-    │       └── log4j2-spring.xml        # Configuración de logging
-    └── test
+```text
+src/
+├── main/
+│   ├── java/com/aydsii/demo/
+│   │   ├── config/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   ├── exception/
+│   │   ├── model/
+│   │   ├── repository/
+│   │   ├── response/
+│   │   └── service/
+│   └── resources/
+│       ├── application.properties
+│       └── log4j2-spring.xml
+└── test/
 ```
 
-## Puesta en marcha
+## Configuración de MySQL
 
-### 1. Levantar MySQL
+La aplicación utiliza una base de datos llamada `verdegreen`. Se puede trabajar con MySQL instalado localmente mediante XAMPP/Laragon o utilizando Docker/Podman.
 
-Si usas XAMPP o Laragon, podes saltar este paso.
+### Opción A: XAMPP o Laragon
+
+1. Iniciar MySQL desde el panel de XAMPP o Laragon.
+2. Verificar desde phpMyAdmin que exista la base de datos `verdegreen`.
+3. La configuración predeterminada utiliza:
+
+   - URL: `jdbc:mysql://localhost:3306/verdegreen`
+   - Usuario: `root`
+   - Contraseña: vacía
+
+Si la instalación utiliza otros datos de conexión, se pueden configurar mediante las variables de entorno `DB_URL`, `DB_USERNAME` y `DB_PASSWORD`.
+
+### Opción B: Docker o Podman
+
+Levantar el contenedor desde la raíz del proyecto:
 
 ```bash
-# Docker
 docker compose up -d
+```
 
-# Podman
+O utilizando Podman:
+
+```bash
 podman compose up -d
 ```
 
-Valores por defecto (se pueden cambiar con variables de entorno o un archivo `.env`):
+Valores predeterminados:
 
-| Variable | Default |
+| Variable | Valor |
 |---|---|
-| `MYSQL_DATABASE` | `demo` |
-| `MYSQL_USER` | `demo` |
-| `MYSQL_PASSWORD` | `demo` |
+| `MYSQL_DATABASE` | `verdegreen` |
+| `MYSQL_USER` | `verdegreen_app` |
+| `MYSQL_PASSWORD` | `verdegreen_dev` |
 | `MYSQL_ROOT_PASSWORD` | `root` |
 | `MYSQL_PORT` | `3306` |
 
-Son credenciales solo para desarrollo local. Para borrar la base y empezar de cero: `docker compose down -v` (o `podman compose down -v`).
+Estas credenciales son únicamente para desarrollo local y deben reemplazarse en cualquier entorno de producción.
 
-### 2. Configurar la aplicación
+Para ejecutar la aplicación con Docker, indicar las credenciales del usuario creado por el contenedor.
 
-Las propiedades de [application.properties](src/main/resources/application.properties) están en blanco a propósito. Completalas con los datos de tu base. Con los valores por defecto del compose:
+En Windows PowerShell:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/demo
-spring.datasource.username=demo
-spring.datasource.password=demo
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+```powershell
+$env:DB_USERNAME = "verdegreen_app"
+$env:DB_PASSWORD = "verdegreen_dev"
+.\mvnw.cmd spring-boot:run
 ```
 
-Las propiedades que no uses, borralas: una propiedad vacía puede pisar el valor por defecto de Spring.
-
-> No subas contraseñas reales al repositorio.
-
-### 3. Ejecutar
+En Linux/macOS:
 
 ```bash
-# Linux / macOS
-./mvnw spring-boot:run
-
-# Windows
-mvnw.cmd spring-boot:run
+DB_USERNAME=verdegreen_app DB_PASSWORD=verdegreen_dev ./mvnw spring-boot:run
 ```
 
-### 4. Tests
+**Importante:** si XAMPP está utilizando el puerto 3306, detener su servicio MySQL antes de levantar el contenedor. También se puede configurar otro puerto mediante `MYSQL_PORT` y ajustar `DB_URL` para que la aplicación se conecte al puerto correspondiente.
+
+## Ejecución de la aplicación
+
+Con XAMPP/Laragon iniciado y la base de datos configurada:
+
+Windows:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Linux/macOS:
+
+```bash
+./mvnw spring-boot:run
+```
+
+## Servicios REST implementados
+
+| Caso de uso | Endpoint | Método |
+|---|---|---|
+| CU-02 Consultar catálogo | `/api/productos` | GET |
+| CU-04 Consultar historial de ventas | `/api/ventas` | GET |
+
+El historial de ventas admite los parámetros opcionales `desde` y `hasta` para consultar un período determinado.
+
+## Swagger UI
+
+Con la aplicación ejecutándose, acceder a:
+
+`http://localhost:8080/swagger-ui.html`
+
+Desde allí se pueden consultar y probar los servicios REST.
+
+## Logging
+
+La configuración de logging se encuentra en `src/main/resources/log4j2-spring.xml`.
+
+Se utiliza SLF4J como fachada y Log4j2 como implementación. Los registros se muestran en consola y se almacenan en archivos dentro de la carpeta `logs/`.
+
+## Pruebas
+
+Para ejecutar los tests:
+
+Windows:
+
+```powershell
+.\mvnw.cmd test
+```
+
+Linux/macOS:
 
 ```bash
 ./mvnw test
 ```
-
-### Swagger UI
-
-Con la app corriendo: http://localhost:8080/swagger-ui.html
-
-## Logging
-
-La configuración está en [log4j2-spring.xml](src/main/resources/log4j2-spring.xml):
-
-- Consola y archivo rotativo en `logs/demo.log` (rota por día o a los 10 MB, conserva 30 días).
-- Nivel `debug` para `com.aydsii`, `info` para el resto.
-
-## Fork: mismo punto de partida para todos
-
-1. **Hacer el fork:** desde la página del repositorio original, botón **Fork** y elegir tu cuenta.
-2. **Clonar tu fork:**
-   ```bash
-   git clone https://github.com/<tu-usuario>/<repositorio>.git
-   cd <repositorio>
-   ```
-3. **Completar la configuración local** (ver "Puesta en marcha"). Los cambios en `application.properties` con tus credenciales son locales: no los subas.
-
-A partir de acá, cada fork es un proyecto independiente: no se sincroniza con el original ni con los forks de los demás.
-
-Reemplazá `<tu-usuario>` y `<repositorio>` por los datos reales.
