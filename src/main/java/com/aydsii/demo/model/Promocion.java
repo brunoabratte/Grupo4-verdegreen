@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity 
 @Getter 
@@ -34,18 +36,17 @@ public class Promocion {
     @Column (nullable = false)
     private LocalDate fechaFin;
 
-    // Rol "-promocionProductos" de la composición Promocion ◆ PromocionProducto (1..*).
-    // cascade = ALL: al guardar la promoción se guardan también sus vínculos.
+    // Composición del diagrama estático: Promocion 1 ---- 1..* PromocionProducto
     @OneToMany(mappedBy = "promocion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PromocionProducto> promocionProductos = new ArrayList<>();
 
-    // Operación de diseño: la promoción arma sus propios vínculos con los productos.
+    // Diagrama de secuencia, pasos 7 y 8: por cada producto se crea un PromocionProducto
     public void agregarProductos(List<Producto> productos) {
         for (Producto producto : productos) {
-            PromocionProducto vinculo = new PromocionProducto();
-            vinculo.setPromocion(this);
-            vinculo.setProducto(producto);
-            promocionProductos.add(vinculo);
+            PromocionProducto pp = new PromocionProducto();
+            pp.setPromocion(this);
+            pp.setProducto(producto);
+            promocionProductos.add(pp);
         }
     }
 }
